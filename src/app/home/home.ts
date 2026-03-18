@@ -1,4 +1,4 @@
-import { Component, inject} from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HousingLocation } from '../housing-location/housing-location';
 import { HousingLocationInfo } from '../housinglocationinfo';
 import { HousingService } from '../housing-service';
@@ -11,11 +11,23 @@ import { HousingService } from '../housing-service';
 })
 export class Home {
   //readonly baseUrl = 'https://angular.dev/assets/images/tutorials/common';
-  housingLocationList: HousingLocationInfo[] = []
+  housingLocationList: HousingLocationInfo[] = [];
   //Injecting HousingService into the component
   housingService: HousingService = inject(HousingService);
 
+  filteredLocationList: HousingLocationInfo[] = [];
+
   constructor() {
     this.housingLocationList = this.housingService.getAllHousingLocations();
+    this.filteredLocationList = this.housingLocationList;
+  }
+  filterResults(text: string) {
+    if (!text) {
+      this.filteredLocationList = this.housingLocationList;
+      return;
+    }
+    this.filteredLocationList = this.housingLocationList.filter((housingLocation) =>
+      housingLocation?.city.toLowerCase().includes(text.toLowerCase()),
+    );
   }
 }
